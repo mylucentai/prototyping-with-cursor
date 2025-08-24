@@ -1,11 +1,11 @@
 "use client";
 
 import styles from './styles.module.css';
-import { Geist } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import Link from 'next/link';
 import { useState, useRef } from 'react';
 
-const geist = Geist({ subsets: ['latin'] });
+const inter = Inter({ subsets: ['latin'] });
 
 const THEMES = {
   blue: {
@@ -74,7 +74,7 @@ export default function ExamplePrototype() {
   const currentTheme = THEMES[theme];
 
   return (
-    <div className={`${styles.container} ${geist.className}`}
+    <div className={`${styles.container} ${inter.className}`}
          onMouseMove={handleMouseMove}
          onMouseUp={handleMouseUp}
          onMouseLeave={handleMouseUp}

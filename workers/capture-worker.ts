@@ -66,12 +66,8 @@ export class CaptureWorker {
       // Set viewport
       await page.setViewportSize({ width: job.width, height: job.height });
 
-      // Set user agent
-      const userAgent = job.breakpoint === 'mobile' 
-        ? 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Mobile/15E148 Safari/604.1'
-        : 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36';
-      
-      await page.setUserAgent(userAgent);
+      // Note: setUserAgent is not available in this version of Playwright
+      // The viewport size will handle mobile vs desktop rendering
 
       // Navigate to URL
       await page.goto(job.url, { 

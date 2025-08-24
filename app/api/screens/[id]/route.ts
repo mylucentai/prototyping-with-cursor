@@ -41,7 +41,7 @@ export async function GET(
     // Calculate diff scores and changes
     const capturesWithDiffs = screen.captures.map((capture, index) => {
       const previousCapture = screen.captures[index + 1];
-      const hasChanged = previousCapture ? capture.diffScore > 0.1 : false;
+      const hasChanged = previousCapture ? (capture.diffScore || 0) > 0.1 : false;
       
       return {
         id: capture.id,
