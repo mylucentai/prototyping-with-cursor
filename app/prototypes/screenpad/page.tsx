@@ -241,6 +241,7 @@ export default function ScreenPad() {
                   }
                 }}
                 className={styles.commandItem}
+                value={`search-${searchQuery}-${selectedSites.length}`}
               >
                 🔍 Search "{searchQuery}" across {selectedSites.length} sites
               </Command.Item>
@@ -281,7 +282,7 @@ export default function ScreenPad() {
                     // Fallback to a placeholder if the real screenshot fails to load
                     console.log(`Failed to load screenshot for ${screenshot.site}:`, e);
                   }}
-                  sandbox="allow-same-origin"
+                  sandbox="allow-same-origin allow-scripts"
                   style={{ border: 'none', width: '100%', height: '100%' }}
                 />
                 {screenshot.updated && (
