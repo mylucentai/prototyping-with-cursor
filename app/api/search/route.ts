@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
+// Make this route dynamic to prevent build-time execution
+export const dynamic = 'force-dynamic';
 
 // Validation schema for search requests
 const searchSchema = z.object({
@@ -22,6 +22,10 @@ const ALLOWED_SITES = [
 
 export async function POST(request: NextRequest) {
   try {
+    // Dynamically import Prisma to avoid build-time issues
+    const { PrismaClient } = await import('@prisma/client');
+    const prisma = new PrismaClient();
+
     const body = await request.json();
     const { query, sites } = searchSchema.parse(body);
 
@@ -70,6 +74,9 @@ export async function POST(request: NextRequest) {
     // Enqueue capture jobs for new URLs (this would integrate with your queue system)
     // For now, we'll simulate this
     const captureJobs = await enqueueCaptureJobs(query, sites);
+
+    // Close Prisma connection
+    await prisma.$disconnect();
 
     // Format response
     const screenshots = existingScreenshots.map(screen => ({

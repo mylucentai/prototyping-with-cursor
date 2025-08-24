@@ -1,13 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
+// Make this route dynamic to prevent build-time execution
+export const dynamic = 'force-dynamic';
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
+    // Dynamically import Prisma to avoid build-time issues
+    const { PrismaClient } = await import('@prisma/client');
+    const prisma = new PrismaClient();
+
     const { id } = params;
 
     // Get screen with all related data
@@ -19,14 +23,7 @@ export async function GET(
           orderBy: { createdAt: 'desc' }
         },
         captures: {
-          orderBy: { createdAt: 'desc' },
-          include: {
-            screen: {
-              include: {
-                screenFiles: true
-              }
-            }
-          }
+          orderBy: { createdAt: 'desc' }
         }
       }
     });
@@ -52,10 +49,13 @@ export async function GET(
         imgHash: capture.imgHash,
         diffScore: capture.diffScore,
         changed: hasChanged,
-        imageUrl: capture.screen.screenFiles[0]?.pngUrl || null,
-        thumbnailUrl: capture.screen.screenFiles[0]?.thumbUrl || null
+        imageUrl: screen.screenFiles[0]?.pngUrl || null,
+        thumbnailUrl: screen.screenFiles[0]?.thumbUrl || null
       };
     });
+
+    // Close Prisma connection
+    await prisma.$disconnect();
 
     // Format response
     const response = {
@@ -114,12 +114,19 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
+    // Dynamically import Prisma to avoid build-time issues
+    const { PrismaClient } = await import('@prisma/client');
+    const prisma = new PrismaClient();
+
     const { id } = params;
 
     // Delete screen and all related data (cascade)
     await prisma.screen.delete({
       where: { id }
     });
+
+    // Close Prisma connection
+    await prisma.$disconnect();
 
     return NextResponse.json({
       message: 'Screen deleted successfully'

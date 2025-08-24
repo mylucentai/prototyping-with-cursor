@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
+// Make this route dynamic to prevent build-time execution
+export const dynamic = 'force-dynamic';
 
 // Validation schema for capture requests
 const captureSchema = z.object({
@@ -24,6 +24,10 @@ const ALLOWED_SITES = [
 
 export async function POST(request: NextRequest) {
   try {
+    // Dynamically import Prisma to avoid build-time issues
+    const { PrismaClient } = await import('@prisma/client');
+    const prisma = new PrismaClient();
+
     const body = await request.json();
     const { url, withContent, breakpoints, priority } = captureSchema.parse(body);
 
@@ -114,6 +118,9 @@ export async function POST(request: NextRequest) {
 
     // In a real implementation, you would add these to your BullMQ queue
     // await queue.add('capture', captureJobs, { priority });
+
+    // Close Prisma connection
+    await prisma.$disconnect();
 
     return NextResponse.json({
       message: `Enqueued ${captureJobs.length} capture jobs`,
