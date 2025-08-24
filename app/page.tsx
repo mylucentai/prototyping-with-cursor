@@ -6,6 +6,11 @@ export default function Home() {
   // Add your prototypes to this array
   const prototypes = [
     {
+      title: 'ScreenPad',
+      description: 'Capture, store, and compare screenshots of industry-leading websites',
+      path: '/prototypes/screenpad'
+    },
+    {
       title: 'Getting started',
       description: 'How to create a prototype',
       path: '/prototypes/example'
@@ -26,7 +31,7 @@ export default function Home() {
   return (
     <div className={`${styles.container} ${instrumentSans.className}`}>
       <header className={styles.header}>
-        <h1>Elizabeth's prototypes</h1>
+        <h1>RYAN's prototypes</h1>
       </header>
 
       <main>

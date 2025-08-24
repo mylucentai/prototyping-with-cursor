@@ -1,0 +1,89 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Site {
+  id       String   @id @default(cuid())
+  name     String
+  domain   String   @unique
+  category String
+  priority Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  screens Screen[]
+
+  @@map("sites")
+}
+
+model Screen {
+  id          String   @id @default(cuid())
+  siteId      String
+  url         String
+  breakpoint  String   // "desktop" | "mobile"
+  status      String   @default("pending") // "pending" | "captured" | "failed"
+  width       Int
+  height      Int
+  ocrText     String?  @db.Text
+  aiTags      String[] // Array of AI-generated tags
+  piiBlur     Boolean  @default(false)
+  version     Int      @default(1)
+  lastSeenAt  DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  site        Site           @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  screenFiles ScreenFile[]
+  captures    Capture[]
+
+  @@unique([siteId, url, breakpoint])
+  @@map("screens")
+}
+
+model ScreenFile {
+  id        String   @id @default(cuid())
+  screenId  String
+  webpUrl   String
+  pngUrl    String
+  thumbUrl  String
+  sha256    String
+  imgHash   String
+  createdAt DateTime @default(now())
+
+  screen    Screen   @relation(fields: [screenId], references: [id], onDelete: Cascade)
+
+  @@map("screen_files")
+}
+
+model Capture {
+  id           String   @id @default(cuid())
+  screenId     String
+  etag         String?
+  lastModified String?
+  domHash      String
+  imgHash      String
+  diffScore    Float?
+  changed      Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  screen       Screen   @relation(fields: [screenId], references: [id], onDelete: Cascade)
+
+  @@map("captures")
+}
+
+model Request {
+  id        String   @id @default(cuid())
+  queryText String
+  sites     String[] // Array of site domains
+  createdAt DateTime @default(now())
+
+  @@map("requests")
+}

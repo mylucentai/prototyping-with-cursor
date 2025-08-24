@@ -12,12 +12,35 @@
     "canvas-confetti": "^1.9.3",
     "next": "15.1.7",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "@prisma/client": "^5.10.0",
+    "prisma": "^5.10.0",
+    "playwright": "^1.42.0",
+    "sharp": "^0.33.0",
+    "pixelmatch": "^5.3.0",
+    "tesseract.js": "^5.0.0",
+    "bullmq": "^5.1.0",
+    "ioredis": "^5.3.2",
+    "meilisearch": "^0.48.0",
+    "zod": "^3.22.4",
+    "@aws-sdk/client-s3": "^3.525.0",
+
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.0",
+    "tailwind-merge": "^2.2.1",
+    "lucide-react": "^0.400.0",
+    "@radix-ui/react-dialog": "^1.0.5",
+    "@radix-ui/react-slot": "^1.0.2",
+    "cmdk": "^0.2.1"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "typescript": "^5"
+    "typescript": "^5",
+    "@types/pixelmatch": "^5.2.4",
+    "tailwindcss": "^3.4.0",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.32"
   }
 }
